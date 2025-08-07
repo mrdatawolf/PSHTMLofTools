@@ -115,7 +115,12 @@ function Export-ToolIndexHtml {
     $html += "</div></div>"
 
     $html += "</body></html>"
-    Set-Content -Path $OutputPath -Value $html
+
+# Save with UTF-8 BOM
+    $utf8WithBom = New-Object System.Text.UTF8Encoding($true)
+    $writer = New-Object System.IO.StreamWriter($OutputPath, $false, $utf8WithBom)
+    $writer.Write($html)
+    $writer.Close()
 }
 
 Export-ModuleMember -Function Get-ToolMetadata, Get-GitHubRepositoryUrl, Get-ExecutableFiles, Format-ToolCard, Export-ToolIndexHtml
